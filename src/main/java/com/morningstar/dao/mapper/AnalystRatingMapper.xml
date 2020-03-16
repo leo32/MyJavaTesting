@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.morningstar.dao.editorial.AnalystRatingMapper">
+    <resultMap id="analystRatingMap" type="com.morningstar.model.editorial.AnalystRating">
+        <result property="mstarid" column="mstarid"/>
+        <result property="dataDate" column="data_date"/>
+        <result property="documentId" column="document_id"/>
+        <result property="status" column="status"/>
+        <result property="languageCode" column="language_code"/>
+        <result property="analystRating" column="analyst_rating"/>
+        <result property="process" column="process"/>
+        <result property="people" column="people"/>
+        <result property="price" column="price"/>
+        <result property="performance" column="performance"/>
+        <result property="parent" column="parent"/>
+        <result property="colId" column="colId"/>
+
+        <result property="analystRatingNumber" column="analyst_rating_number"/>
+        <result property="processNumber" column="process_number"/>
+        <result property="peopleNumber" column="people_number"/>
+        <result property="priceNumber" column="price_number"/>
+        <result property="performanceNumber" column="performance_number"/>
+        <result property="parentNumber" column="parent_number"/>
+    </resultMap>
+
+    <insert id="saveAnalystRating" parameterType="com.morningstar.model.editorial.AnalystRating">
+        call ldapidata.saveAnalystRating(
+        	#{mstarid},
+        	#{dataDate},
+        	#{documentId},
+        	#{languageCode},
+        	#{analystRating},
+        	#{process},
+        	#{people},
+        	#{price},
+        	#{performance},
+        	#{parent},
+        	#{colId},
+        	#{analystRatingNumber},
+        	#{processNumber},
+        	#{peopleNumber},
+        	#{priceNumber},
+        	#{performanceNumber},
+        	#{parentNumber},
+        	#{status}
+        )
+    </insert>
+    <update id="updateStatus">
+    	call ldapidata.updateAnalystRatingStatus(
+    		#{mstarid},
+    		#{dataDate},
+    		#{documentId},
+    		#{status}
+    	)
+    </update>
+    <select id="getAnalystRatingList" resultType="List" resultMap="analystRatingMap">
+        <![CDATA[
+	call ldapidata.getAnalystRating(null)
+        ]]>
+    </select>
+    <select id="getDeleteAnalystRatingList" resultType="List" resultMap="analystRatingMap">
+		<![CDATA[
+			SELECT DISTINCT mstarid  FROM t_analystrating WHERE  mstarid  NOT IN(
+			SELECT distinct mstarid  FROM t_analystrating WHERE `status` = 1 )
+		]]>
+	</select>
+</mapper>
